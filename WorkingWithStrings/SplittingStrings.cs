@@ -83,13 +83,28 @@ namespace WorkingWithStrings
             // TODO #5-5. Analyze unit tests for the method, and add the method implementation.
             // Use String.Split method: https://docs.microsoft.com/en-us/dotnet/api/system.string.split
             char[] separators = new char[] { ',', ':' };
+
             string[] parts = str.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
             if (parts.Length > 4)
             {
                 var firstThree = parts.Take(3).ToArray();
-                var remainingParts = string.Join(",", parts.Skip(3));
 
+                int remainingStartIndex = 0;
+                int currentPartsCount = 0;
+
+                foreach (var part in str.Split(separators))
+                {
+                    if (!string.IsNullOrEmpty(part))
+                    {
+                        currentPartsCount++;
+                        if (currentPartsCount == 4) break;
+                    }
+
+                    remainingStartIndex += part.Length + 1;
+                }
+
+                string remainingParts = str.Substring(remainingStartIndex);
                 return new string[] { firstThree[0], firstThree[1], firstThree[2], remainingParts };
             }
 
